@@ -3,8 +3,6 @@ package com.example.news_compose_c40.screens.news_details
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.rememberScrollableState
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -47,19 +45,25 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class NewsDetailsRoute(val title:String,val sourceName:String)
+data class NewsDetailsRoute(val title: String, val sourceName: String)
 
 @Composable
-fun NewsDetailsScreen(vm:NewsDetailsViewModel= hiltViewModel(),sourceName:String, scope: CoroutineScope, drawerState: DrawerState) {
+fun NewsDetailsScreen(
+    vm: NewsDetailsViewModel = hiltViewModel(),
+    sourceName: String,
+    scope: CoroutineScope,
+    drawerState: DrawerState
+) {
 
     LaunchedEffect(key1 = null) {
         vm.getArticle()
     }
 
     val foundError = vm.uiMessage.errorMessage != null || vm.uiMessage.errorMessageId != null
-    if (foundError&&vm.isErrorDialogVisible) {
+    if (foundError && vm.isErrorDialogVisible) {
 
-        var errorMessage: String = getErrorMessage(vm.uiMessage.errorMessage, vm.uiMessage.errorMessageId)
+        val errorMessage: String =
+            getErrorMessage(vm.uiMessage.errorMessage, vm.uiMessage.errorMessageId)
 
         if (vm.isErrorDialogVisible) {
             ErrorDialog(
@@ -69,34 +73,40 @@ fun NewsDetailsScreen(vm:NewsDetailsViewModel= hiltViewModel(),sourceName:String
             )
         }
     }
-    
-    Scaffold (topBar = {NewsTopAppBar(
-        shouldDisplaySearchIcon = false,
-        shouldDisplayMenuIcon = false,
-        scope = scope,
-        drawerState = drawerState 
-    )}){padding->
-     
+
+    Scaffold(topBar = {
+        NewsTopAppBar(
+            shouldDisplaySearchIcon = false,
+            shouldDisplayMenuIcon = false,
+            scope = scope,
+            drawerState = drawerState,
+            titleString = sourceName
+        )
+    }) { padding ->
+
         ProgressIndicator(isDisplayed = vm.uiMessage.isLoading)
 
         vm.article?.let {
-            NewsDetailsContent(Modifier.padding(top = padding.calculateTopPadding()),it)
+            NewsDetailsContent(Modifier.padding(top = padding.calculateTopPadding()), it)
         }
     }
 }
 
 @Composable
 fun NewsDetailsContent(modifier: Modifier, article: Article) {
-    Column(modifier = modifier
-        .paint(painterResource(id = R.drawable.bg_pattern), contentScale = ContentScale.Crop)
-        .verticalScroll(
-            rememberScrollState()
-        )) {
+    Column(
+        modifier = modifier
+            .paint(painterResource(id = R.drawable.bg_pattern), contentScale = ContentScale.Crop)
+            .verticalScroll(
+                rememberScrollState()
+            )
+    ) {
         NewsCard(article = article)
         NewsDetailsCard(article)
 
     }
 }
+
 @Composable
 fun NewsDetailsCard(article: Article) {
     val context = (LocalContext.current) as HomeActivity
@@ -115,12 +125,14 @@ fun NewsDetailsCard(article: Article) {
             fontSize = 13.sp,
             fontWeight = FontWeight.Normal
         )
-        Row(modifier = Modifier
-            .fillMaxWidth()
-            .clickable {
-                context.openWebsiteForNews(article.url)
-            },
-            verticalAlignment = Alignment.CenterVertically) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable {
+                    context.openWebsiteForNews(article.url)
+                },
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             Spacer(modifier = Modifier.fillMaxWidth(.5f))
             Text(
                 text = stringResource(R.string.view_full_article),
@@ -130,14 +142,18 @@ fun NewsDetailsCard(article: Article) {
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Medium
             )
-            Image(painter = painterResource(id = R.drawable.right_arrow), colorFilter = ColorFilter.tint(
-                Color.DarkGray), contentDescription = null)
+            Image(
+                painter = painterResource(id = R.drawable.right_arrow),
+                colorFilter = ColorFilter.tint(
+                    Color.DarkGray
+                ),
+                contentDescription = null
+            )
         }
 
 
     }
 }
-
 
 @Preview(showSystemUi = true)
 @Composable
@@ -148,9 +164,8 @@ private fun NewsDetailsContentPreview() {
             source = Source(name = "ABC News", id = "1"),
             publishedAt = "3 hours ago",
             content = "dsmnbnm,mnbvbnmnb"
-        ), modifier = Modifier)
-
-
+        ), modifier = Modifier
+    )
 }
 
 

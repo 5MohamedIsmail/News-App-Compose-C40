@@ -1,4 +1,5 @@
 package com.example.news_compose_c40.screens.news
+
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,9 +18,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.news_compose_c40.R
-import com.example.news_compose_c40.screens.news_details.NewsDetailsViewModel
 import com.example.news_compose_c40.widgets.ErrorDialog
 import com.example.news_compose_c40.widgets.NewsList
 import com.example.news_compose_c40.widgets.NewsTopAppBar
@@ -28,8 +27,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class NewsRoute(val categoryID: String,
-                     val categoryName: Int)
+data class NewsRoute(
+    val categoryID: String,
+    val categoryName: Int
+)
 
 
 @Composable
@@ -39,13 +40,15 @@ fun NewsScreen(
     categoryName: Int,
     scope: CoroutineScope,
     drawerState: DrawerState,
-    onNewsClick: (String,String) -> Unit,
+    onNewsClick: (String, String) -> Unit,
     onSearchClick: () -> Unit
 ) {
-    val foundError = vm.uiMessage.errorMessage != null || vm.uiMessage.errorMessageId != null
-    if (foundError&&vm.isErrorDialogVisible) {
 
-        var errorMessage: String = getErrorMessage(vm.uiMessage.errorMessage, vm.uiMessage.errorMessageId)
+    val foundError = vm.uiMessage.errorMessage != null || vm.uiMessage.errorMessageId != null
+    if (foundError && vm.isErrorDialogVisible) {
+
+        val errorMessage: String =
+            getErrorMessage(vm.uiMessage.errorMessage, vm.uiMessage.errorMessageId)
 
         if (vm.isErrorDialogVisible) {
             ErrorDialog(
@@ -70,7 +73,7 @@ fun NewsScreen(
 
     }) { paddingValues: PaddingValues ->
 
-        LaunchedEffect(key1 =null) {
+        LaunchedEffect(key1 = null) {
             vm.getSources(categoryID)
         }
         // Call `getNewsBySource` for the first source once sources are fetched
@@ -100,20 +103,22 @@ fun NewsScreen(
             }
 
 
-                NewsList(
-                    vm.articlesList,
-                    vm.uiMessage.shouldDisplayNoArticlesFound,
-                    vm.uiMessage.isLoading,
-                    onNewsClick
-                )
-
+            NewsList(
+                vm.articlesList,
+                vm.uiMessage.shouldDisplayNoArticlesFound,
+                vm.uiMessage.isLoading,
+                onNewsClick
+            )
 
 
         }
     }
 }
+
 @Composable
-fun getErrorMessage(errorMessage: String?, errorMessageId: Int?) = errorMessage ?: errorMessageId?.let { stringResource(id = it) } ?: stringResource(id = R.string.something_went_wrong)
+fun getErrorMessage(errorMessage: String?, errorMessageId: Int?) =
+    errorMessage ?: errorMessageId?.let { stringResource(id = it) }
+    ?: stringResource(id = R.string.something_went_wrong)
 
 
 @Preview(showBackground = true, showSystemUi = true)
@@ -127,7 +132,7 @@ fun PreviewNewsFragmentScreen() {
             initialValue = DrawerValue.Closed
         ),
         onSearchClick = {},
-        onNewsClick = {_,_->
+        onNewsClick = { _, _ ->
 
         }
     )

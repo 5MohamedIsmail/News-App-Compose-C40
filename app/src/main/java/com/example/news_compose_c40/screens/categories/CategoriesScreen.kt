@@ -115,7 +115,7 @@ private fun PreviewCategoriesList() {
 @Preview(showSystemUi = true)
 @Composable
 private fun PreviewCategoriesFragment() {
-    CategoriesScreen(viewModel(), rememberCoroutineScope(), rememberDrawerState(initialValue = DrawerValue.Closed)) { id, name ->
+    CategoriesScreen(viewModel(), rememberCoroutineScope(), rememberDrawerState(initialValue = DrawerValue.Closed)) { _, _ ->
 
     }
 }
