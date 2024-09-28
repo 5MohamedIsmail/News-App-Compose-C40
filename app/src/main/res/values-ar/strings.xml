@@ -25,6 +25,8 @@
     <string name="connection_error">الرجاء التأكد من اتصالك بالانترنت ثم أعد المحاولة</string>
     <string name="cancel">الغاء</string>
     <string name="try_again">أعد المحاولة</string>
-    <string name="ok">OK</string>
-    <string name="error">Error</string>
+    <string name="ok">نعم</string>
+    <string name="error">خطأ</string>
+    <string name="language_title">اللغة</string>
+    <string name="empty_search_query_error">من فضلك اكتب شيئا.</string>
 </resources>

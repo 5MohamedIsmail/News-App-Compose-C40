@@ -3,9 +3,9 @@ package com.example.news_compose_c40.activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ModalNavigationDrawer
@@ -36,7 +36,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class HomeActivity : ComponentActivity() {
+class HomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         actionBar?.hide()
         installSplashScreen()
@@ -108,23 +108,23 @@ fun NewsAppNavigation(
         composable<CategoriesRoute> {
 
             CategoriesScreen(
-                scope=scope,
-                drawerState=drawerState
+                scope = scope,
+                drawerState = drawerState
             ) { categoryApiID, categoryName ->
-                navController.navigate(NewsRoute(categoryApiID,categoryName))
+                navController.navigate(NewsRoute(categoryApiID, categoryName))
             }
 
         }
 
-        composable<NewsRoute>{ navBackStackEntry ->
+        composable<NewsRoute> { navBackStackEntry ->
             val route = navBackStackEntry.toRoute<NewsRoute>()
             NewsScreen(
                 categoryID = route.categoryID,
-                categoryName =  route.categoryName,
+                categoryName = route.categoryName,
                 scope = scope,
                 drawerState = drawerState,
-                onNewsClick =  { title,sourceName ->
-                    navController.navigate(NewsDetailsRoute(title,sourceName))
+                onNewsClick = { title, sourceName ->
+                    navController.navigate(NewsDetailsRoute(title, sourceName))
 
                 }, onSearchClick = {
                     navController.navigate(SearchRoute)
@@ -133,21 +133,24 @@ fun NewsAppNavigation(
 
         composable<NewsDetailsRoute> {
             val args = it.toRoute<NewsDetailsRoute>()
-            NewsDetailsScreen( sourceName = args.sourceName, scope = scope, drawerState = drawerState)
+            NewsDetailsScreen(
+                sourceName = args.sourceName,
+                scope = scope,
+                drawerState = drawerState
+            )
         }
 
         composable<SearchRoute> {
-            SearchScreen()
+            SearchScreen { title, sourceName ->
+                navController.navigate(NewsDetailsRoute(title, sourceName))
+            }
         }
 
-        composable<SettingsRoute>{
-            SettingsScreen()
+        composable<SettingsRoute> {
+            SettingsScreen(scope = scope, drawerState = drawerState)
         }
     }
-
-
 }
-
 
 @Preview(showSystemUi = true)
 @Composable

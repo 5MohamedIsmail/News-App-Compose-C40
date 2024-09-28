@@ -25,10 +25,12 @@
     <string name="english" translatable="false">English</string>
     <string name="can_t_find_articles">Can\'t find articles</string>
     <string name="something_went_wrong">Something Went wrong.</string>
-    <string name="empty" translatable="false"></string>
+    <string name="empty" translatable="false" />
     <string name="connection_error">There is a problem with your internet connection kindly check your connection .</string>
     <string name="ok">OK</string>
     <string name="error">Error</string>
     <string name="try_again">try again</string>
     <string name="cancel">cancel</string>
+    <string name="language_title">Language</string>
+    <string name="empty_search_query_error">Please write something.</string>
 </resources>
